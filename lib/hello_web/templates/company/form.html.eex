@@ -1,0 +1,101 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= label f, :name, class: "control-label" %>
+    <%= text_input f, :name, class: "form-control" %>
+    <%= error_tag f, :name %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :logo, class: "control-label" %>
+    <%= text_input f, :logo, class: "form-control" %>
+    <%= error_tag f, :logo %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :weburl, class: "control-label" %>
+    <%= text_input f, :weburl, class: "form-control" %>
+    <%= error_tag f, :weburl %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :address1, class: "control-label" %>
+    <%= text_input f, :address1, class: "form-control" %>
+    <%= error_tag f, :address1 %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :address2, class: "control-label" %>
+    <%= text_input f, :address2, class: "form-control" %>
+    <%= error_tag f, :address2 %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :zipcode, class: "control-label" %>
+    <%= text_input f, :zipcode, class: "form-control" %>
+    <%= error_tag f, :zipcode %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :city, class: "control-label" %>
+    <%= text_input f, :city, class: "form-control" %>
+    <%= error_tag f, :city %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :active, class: "control-label" %>
+    <%= checkbox f, :active, class: "checkbox" %>
+    <%= error_tag f, :active %>
+  </div>
+  <div class="form-group">
+     <%= label f, :Country, class: "control-label" %>
+  <%= select(f, :country_id, Enum.map(@countries, &{&1.name, &1.id}), prompt: "Choose your Country", 
+  class: "select") %>
+  </div>
+   <div class="form-group">
+     <%= label f, :State, class: "control-label" %>
+     <%= select(f, :state_id,["1"] ,prompt: "Choose your State", 
+  class: "select") %>
+  </div>
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#company_country_id').on('change',function () {
+            var countryId= $(this).val()
+            if(countryId){
+                $.ajax({
+                    type:'GET',
+                    url:'http://127.0.0.1:4000/liststates/'+countryId,
+                   // data:"country_id="+countryId,
+                    success:function (html) {
+                        if(html){
+                            $('#company_state_id').empty()
+                            $('#company_state_id').append('<option>Select your state</option>')
+                            //alert(JSON.stringify(html))
+                            $.each(html,function (i,element) {
+                                $('#company_state_id').append("<option value='"+html[i].id+"'>"+html[i].name+"</option>")
+                            })
+
+                        }
+                        
+                    }
+                })
+            }
+            
+        })
+
+    })
+</script>
